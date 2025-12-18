@@ -10,7 +10,7 @@
 Designed for efficiency and aesthetics, it serves as a perfect desktop companion or a reference project for Java GUI drawing and thread management.
 
 ## 📸 Preview
-![Application Screenshot](/src/clock_background.jpg)
+![Application Screenshot](/src/clock_review.jpeg)
 
 ## ✨ Features
 * **Dual Display:** View both Digital (HH:MM:SS AM/PM) and Analog clocks side-by-side.

@@ -1,14 +1,45 @@
 package com.myclock;
 
 import java.awt.*;
+import java.io.File;
 import java.time.LocalTime;
+import javax.sound.sampled.*;
 import javax.swing.*;
 
 public class AnalogClockPanel extends JPanel {
+    private Clip tickClip;
+
     public AnalogClockPanel() {
         setBackground(Color.BLACK);
-        Timer timer = new Timer(1000, e -> repaint());
+        loadSound();
+        Timer timer = new Timer(1000, e -> {
+            repaint();
+            playSound();
+        });
         timer.start();
+    }
+
+    private void loadSound() {
+        try {
+            File soundFile = new File("src/tick.wav");
+            if (soundFile.exists()) {
+                AudioInputStream audioInput = AudioSystem.getAudioInputStream(soundFile);
+                tickClip = AudioSystem.getClip();
+                tickClip.open(audioInput);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void playSound() {
+        if (tickClip != null) {
+            if (tickClip.isRunning()) {
+                tickClip.stop();
+            }
+            tickClip.setFramePosition(0);
+            tickClip.start();
+        }
     }
 
     @Override
@@ -35,7 +66,7 @@ public class AnalogClockPanel extends JPanel {
         double hourAngle = (time.getHour() % 12 + time.getMinute() / 60.0) * (2 * Math.PI / 12) - Math.PI / 2;
         drawHand(g2d, centerX, centerY, hourAngle, radius * 0.5, 8, Color.WHITE);
         drawHand(g2d, centerX, centerY, minuteAngle, radius * 0.75, 5, Color.WHITE);
-        drawHand(g2d, centerX, centerY, secondAngle, radius * 0.9, 2, Color.WHITE);
+        drawHand(g2d, centerX, centerY, secondAngle, radius * 0.9, 2, Color.RED);
         g2d.setColor(Color.WHITE);
         g2d.fillOval(centerX - 6, centerY - 6, 12, 12);
     }
